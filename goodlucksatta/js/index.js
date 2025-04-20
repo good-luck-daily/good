@@ -1,11 +1,21 @@
-const timeArray = ['09:00 AM', '09:20 AM', '09:40 AM', '10:00 AM', '10:20 AM', '10:40 AM', '11:00 AM', '11:20 AM', '11:40 AM', '12:00 PM', '12:20 PM', '12:40 PM', '01:00 PM', '01:20 PM', '01:40 PM', '02:00 PM', '02:20 PM', '02:40 PM', '03:00 PM', '03:20 PM', '03:40 PM', '04:00 PM', '04:20 PM', '04:40 PM', '05:00 PM', '05:20 PM', '05:40 PM', '06:00 PM', '06:20 PM', '06:40 PM', '07:00 PM', '07:20 PM', '07:40 PM', '08:00 PM', '08:20 PM', '08:40 PM', '09:00 PM'];
+const timeArray = ['09:00 AM', '09:20 AM', '09:40 AM', '10:00 AM', '10:20 AM', '10:40 AM', '11:00 AM', '11:20 AM', '11:40 AM', '12:00 PM', '12:20 PM', '12:40 PM', '01:00 PM', '01:20 PM', '01:40 PM', '02:00 PM', '02:20 PM', '02:40 PM', '03:00 PM', '03:20 PM', '03:40 PM', '04:00 PM', '04:20 PM', '04:40 PM', '05:00 PM', '05:20 PM', '05:40 PM', '06:00 PM', '06:20 PM', '06:40 PM', '07:00 PM'];
 
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function () {
     startOdometer();
     document.getElementById("today-date").innerHTML = getTodayDate();
-
-
+    let hour = new Date().getHours()
+    if (hour < 9 || hour > 19) {
+        document.getElementById("nexttime").innerHTML = timeArray[0];
+    }else{
+        let ampm = hour > 12 ? 'PM' : 'AM';
+        let minutes = new Date().getMinutes()
+        if (minutes >= 40 ){
+            hour = (hour + 1).toString().padStart(2, '0');
+            minutes = '00';
+        } else { minutes = parseInt(((minutes / 20) + 1).toString()[0]) * 20 }
+        document.getElementById("nexttime").innerHTML = `${hour}:${minutes} ${ampm}`;
+    }
 });
 function getNumber(dateString) {
     $.get("https://api.goodlucksatta.com/" + dateString)
